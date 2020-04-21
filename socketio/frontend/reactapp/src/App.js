@@ -11,7 +11,7 @@ function App() {
         <Route path="/login">
           <LoginScreen />
         </Route>
-        <Route path="/message">
+        <Route path="/home">
           <MessagingScreen />
         </Route>
         <Route path="/">
