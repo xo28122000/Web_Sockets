@@ -1,28 +1,22 @@
 const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
+const port = process.env.PORT || 4000;
+
 const app = express();
-const port = 4000;
+const server = http.createServer(app);
+const io = socketIo(server);
 
-const maxUsers = 5;
+io.on("connection", socket => {
+  console.log("New client connected");
 
-const users = [];
-const emptyList = [0, 1, 2, 3, 4];
-const enterQueue = [];
+  socket.on("incoming data", data => {
+    socket.broadcast.emit("outgoing data", { num: data });
+  });
 
-messages = [];
-
-app.get("/addUser", (req, res) => {
-  if (!req.name) {
-    res.send({ success: false });
-  }
-  if (users.length >= maxUsers) {
-    enterQueue.push(req.name);
-    res.send({ success: true, wait: true, id: -1 });
-  }
-  var id = emptyList.pop();
-  users[id] = req.name;
-  res.send({ success: true, wait: true, id: id });
+  socket.on("disconnect", () => console.log("Client disconnected"));
 });
 
-app.listen(port, () =>
-  console.log(`Example app listening at http://localhost:${port}`)
+server.listen(port, () =>
+  console.log(`App listening at http://localhost:${port}`)
 );

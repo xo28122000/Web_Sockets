@@ -1,0 +1,3 @@
+npm install socket.io - backend
+
+npm i socket.io-client - frontend

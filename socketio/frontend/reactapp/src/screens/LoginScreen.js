@@ -6,8 +6,13 @@ import { UserOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { login } from "../redux/actions/index";
 
+import { Redirect } from "react-router-dom";
+
 const LoginScreen = props => {
-  const enterMessaging = () => {};
+  const [username, setUsername] = React.useState("");
+  const enterMessaging = () => {
+    props.login({ username: username });
+  };
   return (
     <div
       style={{
@@ -18,6 +23,8 @@ const LoginScreen = props => {
         height: "100vh"
       }}
     >
+      {props.isUser ? <Redirect to="home" /> : null}
+
       <div
         style={{
           alignSelf: "center",
@@ -27,6 +34,9 @@ const LoginScreen = props => {
       >
         <Input
           required
+          onChange={env => {
+            setUsername(env.target.value);
+          }}
           placeholder="Enter your name"
           size="large"
           prefix={<UserOutlined className="site-form-item-icon" />}
