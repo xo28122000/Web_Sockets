@@ -9,7 +9,7 @@ import { logout } from "../redux/actions/index";
 
 import socket from "../socket";
 
-class MessagingScreen extends Component {
+class WaitingScreen extends Component {
   state = { message: "", chatLog: "" };
   componentDidMount = () => {
     socket.on("message", data => this.setState({ chatLog: data }));
@@ -62,4 +62,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MessagingScreen);
+)(WaitingScreen);

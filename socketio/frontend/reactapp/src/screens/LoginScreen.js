@@ -2,11 +2,14 @@ import React from "react";
 
 import { Input, Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import "./styles.css";
 
 import { connect } from "react-redux";
 import { login } from "../redux/actions/index";
 
 import { Redirect } from "react-router-dom";
+
+import socket from "../socket";
 
 const LoginScreen = props => {
   const [username, setUsername] = React.useState("");
@@ -14,24 +17,10 @@ const LoginScreen = props => {
     props.login({ username: username });
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignContent: "center",
-        height: "100vh"
-      }}
-    >
+    <div className="parent-center-div">
       {props.isUser ? <Redirect to="home" /> : null}
 
-      <div
-        style={{
-          alignSelf: "center",
-          backgroundColor: "white",
-          padding: "10px"
-        }}
-      >
+      <div className="child-center-div">
         <Input
           required
           onChange={env => {

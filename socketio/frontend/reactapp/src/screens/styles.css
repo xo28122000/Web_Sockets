@@ -1,0 +1,13 @@
+.parent-center-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  height: 100vh;
+}
+
+.child-center-div {
+  align-self: center;
+  background-color: white;
+  padding: 10px;
+}
