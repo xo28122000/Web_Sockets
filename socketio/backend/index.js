@@ -10,8 +10,9 @@ const io = socketIo(server);
 io.on("connection", socket => {
   console.log("New client connected");
 
-  socket.on("incoming data", data => {
-    socket.broadcast.emit("outgoing data", { num: data });
+  socket.on("message", data => {
+    console.log(data);
+    // socket.broadcast.emit("outgoing data", { num: data });
   });
 
   socket.on("disconnect", () => console.log("Client disconnected"));
