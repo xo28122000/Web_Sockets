@@ -11,13 +11,14 @@ import socketIOClient from "socket.io-client";
 
 const socket = socketIOClient("http://127.0.0.1:4000");
 class MessagingScreen extends Component {
-  state = { message: "" };
+  state = { message: "", chatLog: "" };
   componentDidMount = () => {
-    // socket.on("outgoing data", data => this.setState({ response: data.num }));
+    socket.on("message", data => this.setState({ chatLog: data }));
   };
   render() {
     const sendMessage = () => {
       socket.emit("message", this.state.message);
+      this.setState({ message: "" });
     };
     return (
       <div
@@ -38,6 +39,7 @@ class MessagingScreen extends Component {
             padding: "10px"
           }}
         >
+          {this.state.chatLog}
           <Input
             required
             onChange={env => {
