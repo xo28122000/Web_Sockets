@@ -10,15 +10,9 @@ import { logout } from "../redux/actions/index";
 import socket from "../socket";
 
 class WaitingScreen extends Component {
-  state = { message: "", chatLog: "" };
-  componentDidMount = () => {
-    socket.on("message", data => this.setState({ chatLog: data }));
-  };
+  state = {};
+  componentDidMount = () => {};
   render() {
-    const sendMessage = () => {
-      socket.emit("message", this.state.message);
-      this.setState({ message: "" });
-    };
     return (
       <div className="parent-center-div">
         {!this.props.isUser ? <Redirect to="login" /> : null}{" "}
@@ -27,24 +21,7 @@ class WaitingScreen extends Component {
           style={{
             width: "60vw"
           }}
-        >
-          {this.state.chatLog}
-          <Input
-            required
-            onChange={env => {
-              this.setState({ message: env.target.value });
-            }}
-            placeholder=""
-            size="large"
-            style={{ backgroundColor: "transparent", width: "55vw" }}
-          />
-          <Button
-            onClick={sendMessage}
-            style={{ marginLeft: "10px", padding: "5px" }}
-          >
-            Send
-          </Button>
-        </div>
+        ></div>
       </div>
     );
   }

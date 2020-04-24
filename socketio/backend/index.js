@@ -7,6 +7,23 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
+// database //
+
+var maxActiveUsers = 10;
+var maxWaitUsers = 10;
+
+var activeUsers = [];
+var waitUsers = [];
+var availableSpots = [];
+
+var messagePool = [];
+
+// ------- //
+
+app.route("/login", (req, res) => {
+  res.send("done");
+});
+
 io.on("connection", socket => {
   console.log("New client connected");
 

@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Input, Button } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { TextField, Button } from "@material-ui/core";
+
 import "./styles.css";
 
 import { connect } from "react-redux";
@@ -13,30 +13,46 @@ import socket from "../socket";
 
 const LoginScreen = props => {
   const [username, setUsername] = React.useState("");
-  const enterMessaging = () => {
-    props.login({ username: username });
+  const [inpErr, setInpErr] = React.useState(true);
+  const login = () => {
+    // axios
+    // request backend
+    // res - {isActive, isWaiting, id}
+    var res = { isActive: true, isWaiting: false, id: 1 };
+    props.login(res);
   };
   return (
     <div className="parent-center-div">
-      {props.isUser ? <Redirect to="home" /> : null}
+      {props.isUser ? (
+        props.userObj.isActive ? (
+          <Redirect to="home" />
+        ) : props.userObj.isWaiting ? (
+          <Redirect to="wait" />
+        ) : null
+      ) : null}
 
-      <div className="child-center-div">
-        <Input
-          required
-          onChange={env => {
-            setUsername(env.target.value);
-          }}
-          placeholder="Enter your name"
-          size="large"
-          prefix={<UserOutlined className="site-form-item-icon" />}
-          style={{ backgroundColor: "transparent" }}
-        />
-        <Button
-          onClick={enterMessaging}
-          style={{ marginLeft: "10px", padding: "5px" }}
-        >
-          Enter
-        </Button>
+      <div className="child-center-div" style={{ minHeight: "200px" }}>
+        <div>
+          <TextField
+            required
+            error={inpErr}
+            helperText={inpErr ? "username- 3 chars < 8 chars" : ""}
+            id="standard-basic"
+            onChange={env => {
+              setUsername(env.target.value);
+              setInpErr(false);
+              if (username.length > 8 || username.length < 3) {
+                setInpErr(true);
+              }
+            }}
+            label="Enter a username"
+          />
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <Button disabled={inpErr} variant="contained" onClick={login}>
+            Enter The chat room
+          </Button>
+        </div>
       </div>
     </div>
   );
