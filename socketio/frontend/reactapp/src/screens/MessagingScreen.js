@@ -10,8 +10,21 @@ import { logout } from "../redux/actions/index";
 
 import socket from "../socket";
 
+import Message from "../components/Message";
+
 class MessagingScreen extends Component {
-  state = { message: "", chatLog: "" };
+  state = {
+    message: "",
+    chatLog: "",
+    messageList: [
+      { body: "hey", senderId: 1, senderUsername: "J" },
+      { body: "hello", senderId: 2, senderUsername: "P" },
+      { body: "whatsup", senderId: 2, senderUsername: "P" },
+      { body: "heya", senderId: 3, senderUsername: "R" },
+      { body: "all good!", senderId: 1, senderUsername: "J" },
+      { body: "true", senderId: 3, senderUsername: "R" }
+    ]
+  };
   componentDidMount = () => {
     socket.on("message", data => this.setState({ chatLog: data }));
   };
@@ -26,17 +39,33 @@ class MessagingScreen extends Component {
         <div
           className="child-center-div"
           style={{
-            backgroundColor: "red",
             width: "60vw",
-            height: "90vh"
+            height: "90vh",
+            minHeight: "250px"
           }}
         >
-          <div style={{ height: "80vh" }}>{this.state.chatLog}</div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+              height: "80vh",
+
+              textAlign: "center",
+              fontSize: "20px",
+              overflowY: "scroll"
+            }}
+          >
+            {this.state.messageList.map(messageObj => (
+              <Message body={messageObj.body} />
+            ))}
+          </div>
           <div
             style={{
               display: "flex",
               alignSelf: "center",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
+              paddingTop: "10px"
             }}
           >
             <TextField
