@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { Input, Button } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import "./styles.css";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -10,18 +8,30 @@ import { logout } from "../redux/actions/index";
 import socket from "../socket";
 
 class WaitingScreen extends Component {
-  state = {};
+  state = { serveNum: "" };
   componentDidMount = () => {};
   render() {
     return (
       <div className="parent-center-div">
-        {!this.props.isUser ? <Redirect to="login" /> : null}{" "}
+        {!this.props.isUser ? (
+          <Redirect to="login" />
+        ) : this.props.userObj.isActive ? (
+          <Redirect to="home" />
+        ) : null}{" "}
         <div
           className="child-center-div"
           style={{
-            width: "60vw"
+            width: "60vw",
+            alignContent: "center",
+            textAlign: "center",
+            fontSize: "20px"
           }}
-        ></div>
+        >
+          <div>{this.props.isUser ? this.props.userObj.username : null}</div>
+          <div>
+            Serve number: {this.props.isUser ? this.props.userObj.id : null}
+          </div>
+        </div>
       </div>
     );
   }

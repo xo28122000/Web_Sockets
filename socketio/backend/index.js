@@ -21,6 +21,14 @@ var messagePool = [];
 // ------- //
 
 app.route("/login", (req, res) => {
+  if (activeUsers.length < maxActiveUsers) {
+    // log him in as active user
+  } else if (waitUsers.length < maxWaitUsers) {
+    // log him in as wait user
+  }
+  else{
+    // no login 
+  }
   res.send("done");
 });
 

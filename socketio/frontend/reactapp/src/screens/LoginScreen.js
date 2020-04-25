@@ -18,7 +18,7 @@ const LoginScreen = props => {
     // axios
     // request backend
     // res - {isActive, isWaiting, id}
-    var res = { isActive: true, isWaiting: false, id: 1 };
+    var res = { isActive: true, isWaiting: false, id: 1, username: username };
     props.login(res);
   };
   return (
@@ -28,7 +28,9 @@ const LoginScreen = props => {
           <Redirect to="home" />
         ) : props.userObj.isWaiting ? (
           <Redirect to="wait" />
-        ) : null
+        ) : (
+          alert("Server is full: please try again in sometime")
+        )
       ) : null}
 
       <div className="child-center-div" style={{ minHeight: "200px" }}>

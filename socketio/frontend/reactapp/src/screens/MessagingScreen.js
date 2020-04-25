@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 
-import { Input, Button } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { TextField, Button } from "@material-ui/core";
+
 import "./styles.css";
+
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../redux/actions/index";
@@ -21,29 +22,41 @@ class MessagingScreen extends Component {
     };
     return (
       <div className="parent-center-div">
-        {!this.props.isUser ? <Redirect to="login" /> : null}{" "}
+        {/* {!this.props.isUser ? <Redirect to="login" /> : null}{" "} */}
         <div
           className="child-center-div"
           style={{
-            width: "60vw"
+            backgroundColor: "red",
+            width: "60vw",
+            height: "90vh"
           }}
         >
-          {this.state.chatLog}
-          <Input
-            required
-            onChange={env => {
-              this.setState({ message: env.target.value });
+          <div style={{ height: "80vh" }}>{this.state.chatLog}</div>
+          <div
+            style={{
+              display: "flex",
+              alignSelf: "center",
+              justifyContent: "space-between"
             }}
-            placeholder=""
-            size="large"
-            style={{ backgroundColor: "transparent", width: "55vw" }}
-          />
-          <Button
-            onClick={sendMessage}
-            style={{ marginLeft: "10px", padding: "5px" }}
           >
-            Send
-          </Button>
+            <TextField
+              required
+              id="standard-basic"
+              onChange={env => {
+                this.setState({ message: env.target.value });
+              }}
+              label=""
+              style={{ width: "50vw", minWidth: "200px" }}
+            />
+
+            <Button
+              variant="contained"
+              onClick={() => {}}
+              style={{ marginLeft: "20px" }}
+            >
+              Send
+            </Button>
+          </div>
         </div>
       </div>
     );

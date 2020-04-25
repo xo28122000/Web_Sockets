@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import LoginScreen from "./screens/LoginScreen";
 import MessagingScreen from "./screens/MessagingScreen";
+import WaitScreen from "./screens/WaitScreen";
 
 function App() {
   return (
@@ -10,6 +11,9 @@ function App() {
       <Switch>
         <Route path="/login">
           <LoginScreen />
+        </Route>
+        <Route path="/wait">
+          <WaitScreen />
         </Route>
         <Route path="/home">
           <MessagingScreen />
