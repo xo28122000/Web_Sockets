@@ -9,39 +9,77 @@ const io = socketIo(server);
 
 // database //
 
-var maxActiveUsers = 10;
-var maxWaitUsers = 10;
-
-var activeUsers = [];
-var waitUsers = [];
-var availableSpots = [];
+var users = 0;
 
 var messagePool = [];
 
 // ------- //
 
 app.route("/login", (req, res) => {
-  if (activeUsers.length < maxActiveUsers) {
-    // log him in as active user
-  } else if (waitUsers.length < maxWaitUsers) {
-    // log him in as wait user
+  var id = 0;
+  if (availableActiveSpots.length > 0) {
+    id = availableActiveSpots.pop();
+    console.log("id of next active user: ", id);
+    res.send({ id: id, isActive: true, isWaiting: false });
+  } else if (availableWaitSpots.length > 0) {
+    id = availableWaitSpots.pop();
+    console.log("id of wait next user: ", id);
+    res.send({ id: id, isActive: true, isWaiting: false });
+  } else {
+    res.send({ isActive: false, isWaiting: false, id: null });
   }
-  else{
-    // no login 
-  }
-  res.send("done");
 });
 
-io.on("connection", socket => {
-  console.log("New client connected");
+var id = 0;
+var numUsers = 0;
 
-  socket.on("message", data => {
-    console.log(data);
-    io.emit("message", data);
-    // socket.broadcast.emit("outgoing data", { num: data });
+io.on("connection", socket => {
+  var addedUser = false;
+
+  socket.on("new user", username => {
+    if (addedUser) return;
+
+    socket.username = username;
+    socket.id = id;
+    id += 1;
+    ++numUsers;
+    addedUser = true;
+    socket.emit("numUsers", {
+      numUsers: numUsers
+    });
+
+    socket.emit("new user", {
+      username: socket.username
+    });
+    //
+    // socket.broadcast.emit - emits it to everyone except the sender,
+    // socket.emit - emits to everyone
+    //
+
+    //
+    // socket.broadcast.emit("new user", {
+    //   username: socket.username
+    // });
+    //
   });
 
-  socket.on("disconnect", () => console.log("Client disconnected"));
+  socket.on("message", message => {
+    socket.emit("message", {
+      body: message,
+      senderId: socket.id,
+      senderUsername: socket.username
+    });
+  });
+
+  socket.on("disconnect", () => {
+    if (addedUser) {
+      --numUsers;
+
+      socket.broadcast.emit("numUsers", {
+        numUsers: numUsers
+      });
+    }
+  });
 });
 
 server.listen(port, () =>

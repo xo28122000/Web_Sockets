@@ -15,11 +15,9 @@ const LoginScreen = props => {
   const [username, setUsername] = React.useState("");
   const [inpErr, setInpErr] = React.useState(true);
   const login = () => {
-    // axios
-    // request backend
-    // res - {isActive, isWaiting, id}
-    var res = { isActive: true, isWaiting: false, id: 1, username: username };
-    props.login(res);
+    socket.emit("new user", username);
+    var res = { isActive: true, isWaiting: false, id: 1 };
+    props.login({ ...res, username: username });
   };
   return (
     <div className="parent-center-div">
