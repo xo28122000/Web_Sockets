@@ -52,8 +52,8 @@ io.on("connection", socket => {
       username: socket.username
     });
     //
-    // socket.broadcast.emit - emits it to everyone except the sender,
-    // socket.emit - emits to everyone
+    // socket.broadcast.emit - emits it to everyone,
+    // socket.emit - emits only to the user who send the request
     //
 
     //
@@ -64,7 +64,7 @@ io.on("connection", socket => {
   });
 
   socket.on("message", message => {
-    socket.emit("message", {
+    socket.broadcast.emit("message", {
       body: message,
       senderId: socket.id,
       senderUsername: socket.username

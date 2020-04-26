@@ -16,20 +16,12 @@ const LoginScreen = props => {
   const [inpErr, setInpErr] = React.useState(true);
   const login = () => {
     socket.emit("new user", username);
-    var res = { isActive: true, isWaiting: false, id: 1 };
-    props.login({ ...res, username: username });
+    // var res = { isActive: true, isWaiting: false, id: 1 };
+    props.login({ username: username });
   };
   return (
     <div className="parent-center-div">
-      {props.isUser ? (
-        props.userObj.isActive ? (
-          <Redirect to="home" />
-        ) : props.userObj.isWaiting ? (
-          <Redirect to="wait" />
-        ) : (
-          alert("Server is full: please try again in sometime")
-        )
-      ) : null}
+      {props.isUser ? <Redirect to="home" /> : null}
 
       <div className="child-center-div" style={{ minHeight: "200px" }}>
         <div>

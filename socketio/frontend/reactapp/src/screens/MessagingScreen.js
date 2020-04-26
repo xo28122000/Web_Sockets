@@ -16,17 +16,24 @@ class MessagingScreen extends Component {
   state = {
     message: "",
     chatLog: "",
-    messageList: [
-      { body: "hey", senderId: 1, senderUsername: "J" },
-      { body: "hello", senderId: 2, senderUsername: "P" },
-      { body: "whatsup", senderId: 2, senderUsername: "P" },
-      { body: "heya", senderId: 3, senderUsername: "R" },
-      { body: "all good!", senderId: 1, senderUsername: "J" },
-      { body: "true", senderId: 3, senderUsername: "R" }
-    ]
+    messageList: []
   };
   componentDidMount = () => {
-    socket.on("message", data => this.setState({ chatLog: data }));
+    // socket.on("new user",data=>)
+    socket.on("message", data => {
+      console.log(data);
+      this.setState({
+        messageList: this.state.messageList.concat({
+          body: data.body,
+          senderUsername: data.senderUsername
+        })
+      });
+    });
+  };
+  componentWillUnmount = () => {
+    socket.off("message", () => {
+      console.log("message event unsubscribed");
+    });
   };
   render() {
     const sendMessage = () => {
@@ -35,7 +42,7 @@ class MessagingScreen extends Component {
     };
     return (
       <div className="parent-center-div">
-        {/* {!this.props.isUser ? <Redirect to="login" /> : null}{" "} */}
+        {!this.props.isUser ? <Redirect to="login" /> : null}
         <div
           className="child-center-div"
           style={{
@@ -53,12 +60,19 @@ class MessagingScreen extends Component {
 
               textAlign: "center",
               fontSize: "20px",
-              overflowY: "scroll"
+              overflowY: "none",
+              overflowX: "none"
             }}
           >
-            {this.state.messageList.map(messageObj => (
-              <Message body={messageObj.body} />
-            ))}
+            <div style={{ overflowY: "scroll" }}>
+              {this.state.messageList.map((messageObj, i) => (
+                <Message
+                  key={i}
+                  body={messageObj.body}
+                  username={messageObj.senderUsername}
+                />
+              ))}
+            </div>
           </div>
           <div
             style={{
@@ -71,6 +85,7 @@ class MessagingScreen extends Component {
             <TextField
               required
               id="standard-basic"
+              value={this.state.message}
               onChange={env => {
                 this.setState({ message: env.target.value });
               }}
@@ -80,7 +95,9 @@ class MessagingScreen extends Component {
 
             <Button
               variant="contained"
-              onClick={() => {}}
+              onClick={() => {
+                sendMessage();
+              }}
               style={{ marginLeft: "20px" }}
             >
               Send
