@@ -48,7 +48,7 @@ io.on("connection", socket => {
       numUsers: numUsers
     });
 
-    socket.emit("new user", {
+    socket.broadcast.emit("new user", {
       username: socket.username
     });
     //
@@ -77,6 +77,9 @@ io.on("connection", socket => {
 
       socket.broadcast.emit("numUsers", {
         numUsers: numUsers
+      });
+      socket.broadcast.emit("user left", {
+        username: socket.username
       });
     }
   });

@@ -19,7 +19,24 @@ class MessagingScreen extends Component {
     messageList: []
   };
   componentDidMount = () => {
-    // socket.on("new user",data=>)
+    socket.on("new user", data => {
+      this.setState({
+        messageList: this.state.messageList.concat({
+          body: data.username,
+          senderUsername: "User joined"
+        })
+      });
+    });
+
+    socket.on("user left", data => {
+      this.setState({
+        messageList: this.state.messageList.concat({
+          body: data.username,
+          senderUsername: "User left"
+        })
+      });
+    });
+
     socket.on("message", data => {
       console.log(data);
       this.setState({
@@ -34,6 +51,7 @@ class MessagingScreen extends Component {
     socket.off("message", () => {
       console.log("message event unsubscribed");
     });
+    socket.off("new user");
   };
   render() {
     const sendMessage = () => {
